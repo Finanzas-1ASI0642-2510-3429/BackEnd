@@ -1,6 +1,7 @@
 package pe.edu.upc.finance.amortization.iam.interfaces.acl;
 
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.stereotype.Service;
 import pe.edu.upc.finance.amortization.iam.domain.model.commands.SignUpCommand;
 import pe.edu.upc.finance.amortization.iam.domain.model.entities.Role;
 import pe.edu.upc.finance.amortization.iam.domain.model.queries.GetUserByIdQuery;
@@ -21,6 +22,7 @@ import java.util.List;
  * </p>
  *
  */
+@Service
 public class IamContextFacade {
 
     private final UserCommandService userCommandService;
@@ -88,5 +90,25 @@ public class IamContextFacade {
         if (result.isEmpty())
             return Strings.EMPTY;
         return result.get().getUsername();
+    }
+
+    /**
+     * Validates if a user exists with the specified ID
+     * @param userId The user ID to validate
+     * @return true if a user exists with this ID, false otherwise
+     * @throws IllegalArgumentException if userId is null
+     */
+    public boolean existsUserByUserId(Long userId) {
+        if (userId == null) {
+            throw new IllegalArgumentException("User ID cannot be null");
+        }
+
+        try {
+            var query = new GetUserByIdQuery(userId);
+            return userQueryService.handle(query).isPresent();
+        } catch (Exception e) {
+            // Log the exception if needed
+            return false;
+        }
     }
 }

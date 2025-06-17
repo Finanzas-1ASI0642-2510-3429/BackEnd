@@ -97,17 +97,6 @@ spring.jpa.show-sql= true
 1. Abre el proyecto con **IntelliJ IDEA Ultimate**.
 2. Espera a que se resuelvan las dependencias (`Maven` o `Gradle`, según el proyecto).
 3. Ejecuta la clase principal que contiene la anotación `@SpringBootApplication`.
+4. Ingresa a la documentación mediante el link http://localhost:8090/swagger-ui/index.html#/
 
 ---
-
-✅ ¡Listo! Si seguiste todos los pasos correctamente, el proyecto debería estar corriendo en tu entorno local.
-
----
-
-## 📩 Contacto
-
-Para dudas o sugerencias, contacta a: [tu_correo@ejemplo.com]
-
-## 📝 Licencia
-
-Este proyecto está bajo la licencia [MIT](LICENSE).

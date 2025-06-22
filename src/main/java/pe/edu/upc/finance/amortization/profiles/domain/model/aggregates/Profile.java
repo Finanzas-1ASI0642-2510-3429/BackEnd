@@ -2,6 +2,7 @@ package pe.edu.upc.finance.amortization.profiles.domain.model.aggregates;
 
 import jakarta.persistence.*;
 import pe.edu.upc.finance.amortization.profiles.domain.model.commands.CreateProfileCommand;
+import pe.edu.upc.finance.amortization.profiles.domain.model.commands.UpdateProfileCommand;
 import pe.edu.upc.finance.amortization.profiles.domain.model.valueobjects.EmailAddress;
 import pe.edu.upc.finance.amortization.profiles.domain.model.valueobjects.PersonName;
 import pe.edu.upc.finance.amortization.profiles.domain.model.valueobjects.StreetAddress;
@@ -84,5 +85,11 @@ public class Profile extends AuditableAbstractAggregateRoot<Profile> {
 
     public String getStreetAddress() {
         return address.getStreetAddress();
+    }
+
+    public void updateProfile(UpdateProfileCommand command) {
+        this.updateName(command.firstName(), command.lastName());
+        this.updateEmail(command.email());
+        this.updateAddress(command.street(), command.number(), command.city(), command.postalCode(), command.country());
     }
 }

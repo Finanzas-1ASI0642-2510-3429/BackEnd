@@ -1,7 +1,8 @@
 # --- ETAPA 1: CONSTRUCCIÓN (BUILD STAGE) ---
 # Usa una imagen que tenga Maven y un JDK para compilar tu aplicación.
-# 'maven:3.8.2-jdk-21' es una buena opción si usas Java 21.
-FROM maven:3.8.2-jdk-21 AS build
+# Se ha cambiado 'maven:3.8.2-jdk-21' a 'maven:3.9.6-eclipse-temurin-21-alpine'
+# que es un tag más común y disponible que incluye Maven con OpenJDK 21 en una imagen Alpine (ligera).
+FROM maven:3.9.6-eclipse-temurin-21-alpine AS build
 
 # Establece el directorio de trabajo dentro del contenedor para esta etapa
 WORKDIR /app

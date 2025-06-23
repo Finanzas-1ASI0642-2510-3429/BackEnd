@@ -1,14 +1,42 @@
-# Usar una imagen base de OpenJDK con la versión de Java que usas (Java 21)
+# --- ETAPA 1: CONSTRUCCIÓN (BUILD STAGE) ---
+# Usa una imagen que tenga Maven y un JDK para compilar tu aplicación.
+# 'maven:3.8.2-jdk-21' es una buena opción si usas Java 21.
+FROM maven:3.8.2-jdk-21 AS build
+
+# Establece el directorio de trabajo dentro del contenedor para esta etapa
+WORKDIR /app
+
+# Copia solo el archivo pom.xml primero para aprovechar el cache de Docker.
+# Si el pom.xml no cambia, Docker no volverá a descargar las dependencias.
+COPY pom.xml .
+
+# Descarga las dependencias de Maven. Esto ayuda a acelerar futuras construcciones.
+RUN mvn dependency:go-offline -B
+
+# Copia el resto de tu código fuente al directorio de trabajo
+COPY src ./src
+
+# Compila la aplicación y genera el archivo JAR ejecutable.
+# '-DskipTests' es opcional y se usa para omitir la ejecución de los tests durante la construcción del Dockerfile.
+# Si quieres ejecutar tests, omite '-DskipTests' o añádelos en una etapa de CI/CD separada.
+RUN mvn clean package -DskipTests
+
+# --- ETAPA 2: EJECUCIÓN (RUN STAGE) ---
+# Usa una imagen base más ligera que solo contenga el JDK para ejecutar la aplicación.
+# 'openjdk:21-jdk-slim' es ideal para producción porque es más pequeña.
 FROM openjdk:21-jdk-slim
 
-# Etiqueta para mantener el JAR de tu aplicación (se construye en target/)
-ARG JAR_FILE=target/*.jar
+# Establece el directorio de trabajo para la ejecución de la aplicación
+WORKDIR /app
 
-# Copiar el JAR de tu aplicación al contenedor
-COPY ${JAR_FILE} app.jar
+# Copia el archivo JAR generado en la etapa 'build' (la primera etapa) a esta etapa de ejecución.
+# 'app.jar' es un nombre común, asegúrate de que el JAR en 'target/' sea el correcto.
+COPY --from=build /app/target/*.jar app.jar
 
-# Exponer el puerto en el que tu aplicación Spring Boot escucha (por defecto 8080)
+# Expone el puerto en el que tu aplicación Spring Boot escucha.
+# Has especificado 8090, así que lo mantenemos aquí.
 EXPOSE 8090
 
-# Comando para ejecutar la aplicación Spring Boot cuando el contenedor se inicie
+# Define el comando de entrada que se ejecutará cuando el contenedor se inicie.
+# Esto inicia tu aplicación Spring Boot.
 ENTRYPOINT ["java", "-jar", "app.jar"]

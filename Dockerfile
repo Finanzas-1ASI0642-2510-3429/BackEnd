@@ -36,7 +36,7 @@ COPY --from=build /app/target/*.jar app.jar
 
 # Expone el puerto en el que tu aplicación Spring Boot escucha.
 # Has especificado 8090, así que lo mantenemos aquí.
-EXPOSE 8090
+EXPOSE 8080
 
 # Define el comando de entrada que se ejecutará cuando el contenedor se inicie.
 # Esto inicia tu aplicación Spring Boot.

@@ -3,6 +3,7 @@ package pe.edu.upc.finance.amortization.iam.infrastructure.persistence.jpa.repos
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import pe.edu.upc.finance.amortization.iam.domain.model.aggregates.User;
+import pe.edu.upc.finance.amortization.iam.domain.model.valueobjects.ProfileId;
 
 import java.util.Optional;
 
@@ -19,6 +20,8 @@ public interface UserRepository extends JpaRepository<User, Long>
      * @return The user object.
      */
     Optional<User> findByUsername(String username);
+
+    Optional<User> findByProfileId(ProfileId profileId);
 
     /**
      * This method is responsible for checking if the user exists by username.

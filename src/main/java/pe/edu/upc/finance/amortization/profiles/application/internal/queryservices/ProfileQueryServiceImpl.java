@@ -5,7 +5,6 @@ import pe.edu.upc.finance.amortization.profiles.domain.model.aggregates.Profile;
 import pe.edu.upc.finance.amortization.profiles.domain.model.queries.GetAllProfilesQuery;
 import pe.edu.upc.finance.amortization.profiles.domain.model.queries.GetProfileByEmailQuery;
 import pe.edu.upc.finance.amortization.profiles.domain.model.queries.GetProfileByIdQuery;
-import pe.edu.upc.finance.amortization.profiles.domain.model.queries.GetProfileByUserIdQuery;
 import pe.edu.upc.finance.amortization.profiles.domain.services.ProfileQueryService;
 import pe.edu.upc.finance.amortization.profiles.infrastructure.persistence.jpa.repositories.ProfileRepository;
 
@@ -33,10 +32,5 @@ public class ProfileQueryServiceImpl implements ProfileQueryService {
     @Override
     public List<Profile> handle(GetAllProfilesQuery query) {
         return profileRepository.findAll();
-    }
-
-    @Override
-    public Optional<Profile> handle(GetProfileByUserIdQuery query) {
-        return profileRepository.findByUserId(query.userId());
     }
 }

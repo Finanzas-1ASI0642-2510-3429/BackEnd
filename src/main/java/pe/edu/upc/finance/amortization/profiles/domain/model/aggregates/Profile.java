@@ -6,7 +6,6 @@ import pe.edu.upc.finance.amortization.profiles.domain.model.commands.UpdateProf
 import pe.edu.upc.finance.amortization.profiles.domain.model.valueobjects.EmailAddress;
 import pe.edu.upc.finance.amortization.profiles.domain.model.valueobjects.PersonName;
 import pe.edu.upc.finance.amortization.profiles.domain.model.valueobjects.StreetAddress;
-import pe.edu.upc.finance.amortization.profiles.domain.model.valueobjects.UserId;
 import pe.edu.upc.finance.amortization.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 
 /**
@@ -43,21 +42,16 @@ public class Profile extends AuditableAbstractAggregateRoot<Profile> {
             @AttributeOverride(name = "country", column = @Column(name = "address_country"))})
     private StreetAddress address;
 
-    @Embedded
-    private UserId userId;
-
-    public Profile(String firstName, String lastName, String email, String street, String number, String city, String postalCode, String country, Long userId) {
+    public Profile(String firstName, String lastName, String email, String street, String number, String city, String postalCode, String country) {
         this.name = new PersonName(firstName, lastName);
         this.email = new EmailAddress(email);
         this.address = new StreetAddress(street, number, city, postalCode, country);
-        this.userId = new UserId(userId);
     }
 
     public Profile(CreateProfileCommand command) {
         this.name = new PersonName(command.firstName(), command.lastName());
         this.email = new EmailAddress(command.email());
         this.address = new StreetAddress(command.street(), command.number(), command.city(), command.postalCode(), command.country());
-        this.userId = new UserId(command.userId());
     }
 
     public Profile() {

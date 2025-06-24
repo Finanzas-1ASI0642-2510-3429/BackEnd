@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import pe.edu.upc.finance.amortization.iam.domain.model.entities.Role;
+import pe.edu.upc.finance.amortization.iam.domain.model.valueobjects.ProfileId;
 import pe.edu.upc.finance.amortization.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 
 import java.util.HashSet;
@@ -32,6 +33,9 @@ public class User extends AuditableAbstractAggregateRoot<User> {
     @Size(max = 120)
     private String password;
 
+    @Embedded
+    private ProfileId profileId;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(	name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -41,15 +45,17 @@ public class User extends AuditableAbstractAggregateRoot<User> {
     public User() {
         this.roles = new HashSet<>();
     }
+
     public User(String username, String password) {
         this.username = username;
         this.password = password;
         this.roles = new HashSet<>();
     }
 
-    public User(String username, String password, List<Role> roles) {
+    public User(String username, String password, List<Role> roles, ProfileId profileId) {
         this(username, password);
         addRoles(roles);
+        this.profileId = profileId;
     }
 
     /**

@@ -1,6 +1,6 @@
 package pe.edu.upc.finance.amortization.iam.interfaces.acl;
 
-import org.apache.logging.log4j.util.Strings;
+import io.jsonwebtoken.lang.Strings;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.finance.amortization.iam.domain.model.commands.SignUpCommand;
 import pe.edu.upc.finance.amortization.iam.domain.model.entities.Role;
@@ -11,6 +11,7 @@ import pe.edu.upc.finance.amortization.iam.domain.services.UserQueryService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * IamContextFacade
@@ -32,38 +33,6 @@ public class IamContextFacade {
                             UserQueryService userQueryService) {
         this.userCommandService = userCommandService;
         this.userQueryService = userQueryService;
-    }
-
-    /**
-     * Creates a user with the given username and password.
-     * @param username The username of the user.
-     * @param password The password of the user.
-     * @return The id of the created user.
-     */
-    public Long createUser(String username, String password) {
-        var signUpCommand = new SignUpCommand(username, password, List.of(Role.getDefaultRole()));
-        var result = userCommandService.handle(signUpCommand);
-        if (result.isEmpty()) return 0L;
-        return result.get().getId();
-    }
-
-    /**
-     * Creates a user with the given username, password and roles.
-     * @param username The username of the user.
-     * @param password The password of the user.
-     * @param roleNames The names of the roles of the user. When a role does not exist,
-     *                  it is ignored.
-     * @return The id of the created user.
-     */
-    public Long createUser(String username, String password, List<String> roleNames) {
-        var roles = roleNames != null
-                ? roleNames.stream().map(Role::toRoleFromName).toList()
-                : new ArrayList<Role>();
-        var signUpCommand = new SignUpCommand(username, password, roles);
-        var result = userCommandService.handle(signUpCommand);
-        if (result.isEmpty())
-            return 0L;
-        return result.get().getId();
     }
 
     /**
@@ -102,7 +71,6 @@ public class IamContextFacade {
         if (userId == null) {
             throw new IllegalArgumentException("User ID cannot be null");
         }
-
         try {
             var query = new GetUserByIdQuery(userId);
             return userQueryService.handle(query).isPresent();

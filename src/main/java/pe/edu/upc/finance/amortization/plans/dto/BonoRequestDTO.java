@@ -14,7 +14,7 @@ public class BonoRequestDTO {
     // Nuevos campos
     private String tipoTasaBase; // TEA, TNA, TES
     private Double tasaBase;
-    private Double tasaConvertida; // opcional: si la calculas desde el frontend
+    private String nombreCliente;
 
     // Getters
     public String getNombre() {
@@ -61,8 +61,9 @@ public class BonoRequestDTO {
         return tasaBase;
     }
 
-    public Double getTasaConvertida() {
-        return tasaConvertida;
+
+    public String getNombreCliente() {
+        return nombreCliente;
     }
 
     // Setters
@@ -110,7 +111,7 @@ public class BonoRequestDTO {
         this.tasaBase = tasaBase;
     }
 
-    public void setTasaConvertida(Double tasaConvertida) {
-        this.tasaConvertida = tasaConvertida;
+    public void setNombreCliente(String nombreCliente) {
+        this.nombreCliente = nombreCliente;
     }
 }

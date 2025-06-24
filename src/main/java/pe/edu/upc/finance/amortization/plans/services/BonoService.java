@@ -2,6 +2,7 @@ package pe.edu.upc.finance.amortization.plans.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pe.edu.upc.finance.amortization.plans.dto.BonoRequestDTO;
 import pe.edu.upc.finance.amortization.plans.entities.Bono;
 import pe.edu.upc.finance.amortization.plans.entities.Pago;
@@ -10,6 +11,7 @@ import pe.edu.upc.finance.amortization.plans.repository.BonoRepository;
 import java.util.List;
 
 @Service
+@Transactional
 public class BonoService {
     @Autowired
     private BonoRepository bonoRepository;
@@ -34,17 +36,24 @@ public class BonoService {
         bono.setTipoTasaBase(dto.getTipoTasaBase());
         bono.setTasaBase(dto.getTasaBase());
 
-        // Convertir la tasa base a una tasa efectiva periódica (tasaConvertida)
-        Double tasaConvertida = convertirTasa(dto.getTipoTasaBase(), dto.getTasaBase(), dto.getFrecuenciaPago(), dto.getCapitalizacion());
+        // 🔹 Asignar el nuevo campo
+        bono.setNombreCliente(dto.getNombreCliente());
+
+        // Convertir la tasa base a una tasa efectiva periódica
+        Double tasaConvertida = convertirTasa(
+                dto.getTipoTasaBase(),
+                dto.getTasaBase(),
+                dto.getFrecuenciaPago(),
+                dto.getCapitalizacion()
+        );
         bono.setTasaConvertida(tasaConvertida);
 
-        // Generar pagos a partir del bono completo
+        // Generar pagos
         List<Pago> pagos = pagoService.generarPagos(bono);
         bono.setPagos(pagos);
 
         return bonoRepository.save(bono);
     }
-
 
     private Double convertirTasa(String tipoTasaBase, Double tasaBase, String frecuenciaPago, String capitalizacion) {
         // Determinar la cantidad de pagos al año según la frecuencia
@@ -103,11 +112,12 @@ public class BonoService {
         return bonoRepository.findAll();
     }
 
+    @Transactional
     public Bono actualizarBono(Long bonoId, BonoRequestDTO dto) {
         Bono bonoExistente = bonoRepository.findById(bonoId)
                 .orElseThrow(() -> new RuntimeException("Bono no encontrado"));
 
-        // Actualizar campos
+        // Actualizar campos del bono
         bonoExistente.setNombre(dto.getNombre());
         bonoExistente.setMontoNominal(dto.getMontoNominal());
         bonoExistente.setPlazoAnios(dto.getPlazoAnios());
@@ -119,19 +129,31 @@ public class BonoService {
         bonoExistente.setTipoGracia(dto.getTipoGracia());
         bonoExistente.setTipoTasaBase(dto.getTipoTasaBase());
         bonoExistente.setTasaBase(dto.getTasaBase());
+        // 🔹 Asignar el nuevo campo
+        bonoExistente.setNombreCliente(dto.getNombreCliente());
 
-        // Recalcular tasaConvertida
-        double tasaConvertida = convertirTasa(dto.getTipoTasaBase(), dto.getTasaBase(), dto.getFrecuenciaPago(), dto.getCapitalizacion());
+        // Recalcular tasa convertida
+        double tasaConvertida = convertirTasa(
+                dto.getTipoTasaBase(),
+                dto.getTasaBase(),
+                dto.getFrecuenciaPago(),
+                dto.getCapitalizacion()
+        );
         bonoExistente.setTasaConvertida(tasaConvertida);
 
-        // Eliminar pagos anteriores y generar nuevos
-        bonoExistente.getPagos().clear();
+        // Eliminar correctamente los pagos existentes
+        List<Pago> pagosActuales = bonoExistente.getPagos();
+        for (int i = pagosActuales.size() - 1; i >= 0; i--) {
+            Pago pago = pagosActuales.get(i);
+            pago.setBono(null);         // Rompe relación con el bono
+            pagosActuales.remove(i);    // Elimina de la lista
+        }
+
+        // Generar nuevos pagos
         List<Pago> nuevosPagos = pagoService.generarPagos(bonoExistente);
         nuevosPagos.forEach(p -> p.setBono(bonoExistente));
         bonoExistente.setPagos(nuevosPagos);
 
         return bonoRepository.save(bonoExistente);
     }
-
-
 }

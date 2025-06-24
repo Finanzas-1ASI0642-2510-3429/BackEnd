@@ -27,6 +27,9 @@ public class Bono {
     private Double tasaBase;       // Ej: 9.0
     private Double tasaConvertida; // Ej: 0.04403
 
+    // 🔹 NUEVO CAMPO
+    private String nombreCliente;
+
     @OneToMany(mappedBy = "bono", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Pago> pagos = new ArrayList<>();
@@ -88,6 +91,10 @@ public class Bono {
         return pagos;
     }
 
+    public String getNombreCliente() {
+        return nombreCliente;
+    }
+
     // Setters
     public void setId(Long id) {
         this.id = id;
@@ -143,5 +150,9 @@ public class Bono {
 
     public void setPagos(List<Pago> pagos) {
         this.pagos = pagos;
+    }
+
+    public void setNombreCliente(String nombreCliente) {
+        this.nombreCliente = nombreCliente;
     }
 }

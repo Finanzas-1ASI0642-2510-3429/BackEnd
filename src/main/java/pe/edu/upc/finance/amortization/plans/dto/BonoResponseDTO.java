@@ -119,4 +119,3 @@ public class BonoResponseDTO {
         this.tipoGracia = tipoGracia;
     }
 }
-

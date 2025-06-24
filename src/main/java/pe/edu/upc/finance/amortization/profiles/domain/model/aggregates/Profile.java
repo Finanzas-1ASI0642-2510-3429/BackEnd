@@ -12,13 +12,13 @@ import pe.edu.upc.finance.amortization.shared.domain.model.aggregates.AuditableA
  * Represents a Profile entity that aggregates personal information, including name, email, address, and user ID.
  * This class is auditable and extends from {@code AuditableAbstractAggregateRoot}.
  * It provides methods to manipulate and retrieve personal information.
- *
+ * <p>
  * The Profile entity has the following attributes:
  * - A person's name, represented by {@code PersonName}.
  * - An email address, represented by {@code EmailAddress}.
  * - A street address, represented by {@code StreetAddress}.
  * - A unique user ID, represented by {@code UserId}.
- *
+ * <p>
  * The Profile class supports operations for creating and updating the entity's attributes and provides access
  * to formatted representations of personal details.
  */

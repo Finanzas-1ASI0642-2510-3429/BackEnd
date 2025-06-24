@@ -1,7 +1,5 @@
 package pe.edu.upc.finance.amortization.iam.interfaces.rest.resources;
 
-import pe.edu.upc.finance.amortization.iam.domain.model.entities.Role;
-
 import java.util.List;
 
 public record SignUpResource(

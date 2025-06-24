@@ -2,16 +2,10 @@ package pe.edu.upc.finance.amortization.iam.interfaces.acl;
 
 import io.jsonwebtoken.lang.Strings;
 import org.springframework.stereotype.Service;
-import pe.edu.upc.finance.amortization.iam.domain.model.commands.SignUpCommand;
-import pe.edu.upc.finance.amortization.iam.domain.model.entities.Role;
 import pe.edu.upc.finance.amortization.iam.domain.model.queries.GetUserByIdQuery;
 import pe.edu.upc.finance.amortization.iam.domain.model.queries.GetUserByUsernameQuery;
 import pe.edu.upc.finance.amortization.iam.domain.services.UserCommandService;
 import pe.edu.upc.finance.amortization.iam.domain.services.UserQueryService;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * IamContextFacade

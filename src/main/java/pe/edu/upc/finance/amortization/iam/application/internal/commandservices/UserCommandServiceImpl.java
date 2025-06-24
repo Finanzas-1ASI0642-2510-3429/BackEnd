@@ -8,7 +8,6 @@ import pe.edu.upc.finance.amortization.iam.application.internal.outboundservices
 import pe.edu.upc.finance.amortization.iam.domain.model.aggregates.User;
 import pe.edu.upc.finance.amortization.iam.domain.model.commands.SignInCommand;
 import pe.edu.upc.finance.amortization.iam.domain.model.commands.SignUpCommand;
-import pe.edu.upc.finance.amortization.iam.domain.model.valueobjects.ProfileId;
 import pe.edu.upc.finance.amortization.iam.domain.services.UserCommandService;
 import pe.edu.upc.finance.amortization.iam.infrastructure.persistence.jpa.repositories.RoleRepository;
 import pe.edu.upc.finance.amortization.iam.infrastructure.persistence.jpa.repositories.UserRepository;
